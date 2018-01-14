@@ -11,12 +11,15 @@ self.onmessage = function(event) {
     xhr.responseType = 'arraybuffer';
     xhr.onload = function(e) {
         if (xhr.status == 200) {
-            nextStep(xhr.response);
+            nextStep(xhr.response, resourceUrl);
+            // debugger;
+            // console.log(xhr.response);
+            
         }
     };
     xhr.send();
 };
-function nextStep(arrayBuffer) {
+function nextStep(arrayBuffer, url) {
     var xhr = new XMLHttpRequest();
     // Using FormData polyfill for Web workers!
     var fd = new FormData();
@@ -24,9 +27,11 @@ function nextStep(arrayBuffer) {
 
     // The native FormData.append method ONLY takes Blobs, Files or strings
     // The FormData for Web workers polyfill can also deal with array buffers
-    fd.append('file', arrayBuffer);
+    fd.append('image', arrayBuffer, 'test.gif');
+    fd.append('name', 'test-filename');
+    fd.append('block', JSON.stringify(['shikib', 'hitler']));
 
-    xhr.open('POST', 'http://YOUR.DOMAIN.HERE/posturl.php', true);
+    xhr.open('POST', 'http://ec2-52-41-153-66.us-west-2.compute.amazonaws.com:9999/test', true);
 
     // Transmit the form to the server
     xhr.send(fd);
