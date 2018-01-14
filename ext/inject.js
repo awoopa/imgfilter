@@ -79,10 +79,9 @@ function getImages() {
 			chrome.runtime.sendMessage({method: 'postUrl', url: imgEl.dataset.imgfilterSrc}, res => {
 				if (!res.block) {
 					// restore the image
-					loadingSpinner.remove();
 					imgEl.src = imgEl.dataset.imgfilterSrc;
-				} else {
 					loadingSpinner.remove();
+				} else {
 					// blur it out and make it really dark
 					imgEl.style.filter = "brightness(0)";
 					// restore image
@@ -99,6 +98,7 @@ function getImages() {
 						imgEl.style.filter = 'brightness(0)';
 						overlay.style.display = 'block';
 					})
+					loadingSpinner.remove();
 				}
 			});
 	});
