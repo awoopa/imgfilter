@@ -83,7 +83,7 @@ function getImages() {
 				} else {
 					loadingSpinner.remove();
 					// blur it out and make it really dark
-					imgEl.style.filter = "blur(50px) brightness(0)";
+					imgEl.style.filter = "brightness(0)";
 					// restore image
 					imgEl.src = imgEl.dataset.imgfilterSrc;
 					// add the overlay text
@@ -95,7 +95,7 @@ function getImages() {
 						overlay.style.display = 'none';
 					})
 					parentDiv.addEventListener('mouseout', e => {
-						imgEl.style.filter = 'blur(50px) brightness(0)';
+						imgEl.style.filter = 'brightness(0)';
 						overlay.style.display = 'block';
 					})
 				}
