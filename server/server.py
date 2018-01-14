@@ -4,6 +4,7 @@ from tornado.web import Application, RequestHandler, url
 import epilepsy
 import gifutils
 import json
+import os
 import nude
 import ms_cv
 import tag as tagger
@@ -21,7 +22,7 @@ class ImageHandler(RequestHandler):
     image_name = self.get_argument('name')
     filename, file_extension = os.path.splitext(image_name)
     hash_name = hashlib.md5(filename.encode())
-    image_name = hash_object.hexdigest() + ".jpg"
+    image_name = hash_name.hexdigest() + ".jpg"
     blocked_words = json.loads(self.get_argument('block'))
 
     if image_name in image_cache:
@@ -45,7 +46,7 @@ class GIFHandler(RequestHandler):
     gif_name = self.get_argument('name')
     filename, file_extension = os.path.splitext(gif_name)
     hash_name = hashlib.md5(filename.encode())
-    gif_name = hash_object.hexdigest() + ".gif"
+    gif_name = hash_name.hexdigest() + ".gif"
     blocked_words = json.loads(self.get_argument('block'))
 
     if gif_name in gif_cache:
