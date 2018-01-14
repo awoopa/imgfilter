@@ -1,6 +1,7 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application, RequestHandler, url
 
+import epilepsy
 import json
 import nude
 import ms_cv
@@ -10,13 +11,14 @@ class MainHandler(RequestHandler):
   def get(self):
     self.write("Hello, world")
 
+
 class ImageHandler(RequestHandler):
   def post(self):
     print("request!")
     image_data = self.request.files['image'][0]['body']
     image_name = self.get_argument('name')
     blocked_words = json.loads(self.get_argument('block'))
-  
+
     # Write the file to disk
     open("temp/%s" % image_name, "wb+").write(image_data)
 
@@ -24,6 +26,7 @@ class ImageHandler(RequestHandler):
     block, caption = should_block("temp/%s" % image_name, blocked_words)
 
     self.finish(json.dumps({"block": block, "caption": caption}))
+
 
 class GIFHandler(RequestHandler):
   def post(self):
@@ -38,12 +41,13 @@ class GIFHandler(RequestHandler):
 
     self.finish(json.dumps({"block": block, "caption": "GIF"}))
 
+
 def should_block_gif(gif_path):
   """
   Determine whether or not to block GIF.
   """
-  # TODO by William
-  return False
+  return epilepsy.is_gif_safe(gif_path)
+
 
 def should_block(image_path, blocked_words):
   """
@@ -63,7 +67,8 @@ def should_block(image_path, blocked_words):
     return True, "NUDE"
 
   return False, ms_caption
- 
+
+
 def make_app():
   return Application([
     url(r"/", MainHandler),
@@ -71,6 +76,7 @@ def make_app():
     url(r"/image", ImageHandler),
     url(r"/gif", GIFHandler),
   ])
+
 
 def main():
   app = make_app()

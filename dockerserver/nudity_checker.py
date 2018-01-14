@@ -13,7 +13,6 @@ class ImageHandler(RequestHandler):
   def post(self):
     image_data = self.request.files['image'][0]['body']
     image_name = self.get_argument('name')
-    blocked_words = json.loads(self.get_argument('block'))
   
     # Write the file to disk
     open("temp/%s" % image_name, "wb+").write(image_data)
