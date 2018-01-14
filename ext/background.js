@@ -46,8 +46,10 @@ function nextStep(arrayBuffer, url, sendResponse) {
 
 		fd.append('name', escape(url.replace(/\//g, '')));
 		fd.append('block', JSON.stringify(blacklist));
+		fd.append('blockNSFW', store['blockNSFW']);
+		fd.append('blockEpileptic', store['blockEpileptic']);
 
-		console.log(blacklist);
+		console.log(fd);
 
 		fetch(apiUrl, {
 			method: 'POST',
