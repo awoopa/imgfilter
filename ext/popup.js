@@ -1,40 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
-	var state = false;
-	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-	  chrome.tabs.sendMessage(tabs[0].id, {getState: true}, function(response) {
-	    state = response.state;
+  // Load previous state of button toggle
+  chrome.storage.sync.get(null, function(store) {
+    if (store['blockEpileptic']) {
+      document.getElementById('blockEpileptic').checked = true
+    } else {
+      document.getElementById('blockEpileptic').checked = false
+    }
 
-	    document.getElementById('enableTagging').checked = state;
+    if (store['blockNSFW']) {
+      document.getElementById('blockNSFW').checked = true
+    } else {
+      document.getElementById('blockNSFW').checked = false
+    }
 
-    	chrome.tabs.sendMessage(tabs[0].id, {getSummary: true}, function (summaries) {
-    	    var summary = document.getElementById('summary-holder');
+    if (store['captionBlockedContent']) {
+      document.getElementById('captionBlockedContent').checked = true
+    } else {
+      document.getElementById('captionBlockedContent').checked = false
+    }
+  });
 
-		    summaries.summary.forEach(e => {
-		    	var el = document.createElement('li');
-		    	el.innerText = e;
-		    	summary.appendChild(el);
-		    })
-    	});
-	  });
+  // Add event listeners for button toggles
+	document.getElementById('blockEpileptic').addEventListener('click', () => {
+    blockEpilepticChecked = document.getElementById('blockEpileptic').checked
+    chrome.storage.sync.set({'blockEpileptic': blockEpilepticChecked});
 	});
 
+  document.getElementById('blockNSFW').addEventListener('click', () => {
+    blockEpilepticChecked = document.getElementById('blockNSFW').checked
+    chrome.storage.sync.set({'blockNSFW': blockEpilepticChecked});
+  });
 
-	document.getElementById('enableTagging').addEventListener('click', () => {
-		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-		  chrome.tabs.sendMessage(tabs[0].id, {colourize: true}, function(response) {
-    	    document.getElementById('enableTagging').checked = response.state;
-		  });
-		});
-	});
-
-	document.getElementById('status').addEventListener('click', () => {
-		chrome.tabs.create({url: 'dataviz.html'});
-	});
-
-	document.getElementById('speak').addEventListener('click', () => {
-		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-		  chrome.tabs.sendMessage(tabs[0].id, {getText: true}, function(response) {
-		  });
-		});
-	})
+  document.getElementById('captionBlockedContent').addEventListener('click', () => {
+    blockEpilepticChecked = document.getElementById('captionBlockedContent').checked
+    chrome.storage.sync.set({'captionBlockedContent': blockEpilepticChecked});
+  });
 });

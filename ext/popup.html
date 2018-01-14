@@ -8,32 +8,19 @@
 	<head>
 		<title>epilep.tech</title>
 		<link href="foundation.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
 
-		<style>
-			body {
-				font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-				font-size: 100%;
-				width: 400px;
-			}
-			#status {
-				/* avoid an excessively wide status text */
-				white-space: pre;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				max-width: 500px;
-			}
-		</style>
 		<script src="popup.js"></script>
 	</head>
 	<body>
 		<div class="row">
 			<div class="small-12 columns">
-        <h2>Settings</h2>
-				<a class="left">Block Potential Epileptic Triggers</a>
+        <h2 class="header"><b>Settings</b></h2>
+				<a class="left">Blocked Epileptic Triggers</a>
 				<div class="switch left">
-				  <input class="switch-input" id="enableTagging" type="checkbox" name="enableTagging">
-				  <label class="switch-paddle" for="enableTagging">
-				    <span class="show-for-sr">Enable Tagging</span>
+				  <input class="switch-input" id="blockEpileptic" type="checkbox" name="blockEpileptic">
+				  <label class="switch-paddle" for="blockEpileptic">
+				    <span class="show-for-sr">Block Epileptic Triggers</span>
 			        <span class="switch-active" aria-hidden="true">On</span>
 				    <span class="switch-inactive" aria-hidden="true">Off</span>
 				  </label>
@@ -42,9 +29,9 @@
       <div class="small-12 columns">
         <a class="left">Block NSFW Content</a>
         <div class="switch left">
-          <input class="switch-input" id="enableTagging" type="checkbox" name="enableTagging">
-          <label class="switch-paddle" for="enableTagging">
-            <span class="show-for-sr">Enable Tagging</span>
+          <input class="switch-input" id="blockNSFW" type="checkbox" name="blockNSFW">
+          <label class="switch-paddle" for="blockNSFW">
+            <span class="show-for-sr">Block NSFW Content</span>
               <span class="switch-active" aria-hidden="true">On</span>
             <span class="switch-inactive" aria-hidden="true">Off</span>
           </label>
@@ -53,31 +40,14 @@
       <div class="small-12 columns">
         <a class="left">Caption Blocked Content</a>
         <div class="switch left">
-          <input class="switch-input" id="enableTagging" type="checkbox" name="enableTagging">
-          <label class="switch-paddle" for="enableTagging">
-            <span class="show-for-sr">Enable Tagging</span>
+          <input class="switch-input" id="captionBlockedContent" type="checkbox" name="captionBlockedContent">
+          <label class="switch-paddle" for="captionBlockedContent">
+            <span class="show-for-sr">Caption Blocked Content</span>
               <span class="switch-active" aria-hidden="true">On</span>
             <span class="switch-inactive" aria-hidden="true">Off</span>
           </label>
         </div>
       </div>
-		</div>
-		<div class="row">
-			<div class="small-12 columns">
-			<h2>Summary</h2>
-			<ul id="summary-holder">
-			</ul>
-			</div>
-		</div>
-		<div class="row">
-			<div class="small-12 columns">
-			<a id="speak" class="button">Speak</a>
-			</div>
-		</div>
-		<div class="row">
-			<div class="small-12 columns">
-			<a id="status" class="button">View data >></a>
-			</div>
 		</div>
 	</body>
 </html>
