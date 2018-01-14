@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="small-12 columns">
         <h2 class="header"><b>Settings</b></h2>
-				<a class="left">Blocked Epileptic Triggers</a>
+				<a class="left">Block Epileptic Triggers</a>
 				<div class="switch left">
 				  <input class="switch-input" id="blockEpileptic" type="checkbox" name="blockEpileptic">
 				  <label class="switch-paddle" for="blockEpileptic">
@@ -47,6 +47,14 @@
             <span class="switch-inactive" aria-hidden="true">Off</span>
           </label>
         </div>
+      </div>
+      <div class="small-12 columns">
+        <a class="left">Blacklisted Image Content</a>
+          <input id="addBlacklistItem" type="text" placeholder="Add new blacklist item" />
+          <table id="blacklistTable">
+            <tbody id="blacklistTableBody">
+            </tbody>
+          </table>
       </div>
 		</div>
 	</body>

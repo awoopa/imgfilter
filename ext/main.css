@@ -8,3 +8,12 @@ body {
   font-size: 24px;
   margin-top: 10px;
 }
+
+.removeButton {
+  vertical-align:middle;
+  cursor: pointer;
+  font-weight: bolder;
+  color: red;
+  font-size: 20px;
+  float: right;
+}
