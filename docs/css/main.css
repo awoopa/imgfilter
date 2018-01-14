@@ -1,3 +1,8 @@
 #logo {
   width: 200px;
 }
+
+#bgimage {
+  height: 900px;
+  background-color: white;
+}
