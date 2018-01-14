@@ -17,3 +17,7 @@ body {
   font-size: 20px;
   float: right;
 }
+
+#addBlacklistItem {
+  margin-top: 5px;
+}
