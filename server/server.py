@@ -86,8 +86,7 @@ def should_block(image_path, blocked_words):
         return True, ms_caption
 
   if nude.has_nudity(image_path):
-    print("n00d")
-    return True, "NUDE"
+    return True, ms_caption
 
   return False, ms_caption
 
