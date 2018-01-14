@@ -11,6 +11,7 @@ class MainHandler(RequestHandler):
 
 class ImageHandler(RequestHandler):
   def post(self):
+    print("request!")
     image_data = self.request.files['image'][0]['body']
     image_name = self.get_argument('name')
     blocked_words = json.loads(self.get_argument('block'))
@@ -22,6 +23,26 @@ class ImageHandler(RequestHandler):
     block, caption = should_block("temp/%s" % image_name, blocked_words)
 
     self.finish(json.dumps({"block": block, "caption": caption}))
+
+class GIFHandler(RequestHandler):
+  def post(self):
+    gif_data = self.request.files['gif'][0]['body']
+    gif_name = self.get_argument('name')
+  
+    # Write the file to disk
+    open("temp/%s" % gif_name, "wb+").write(image_data)
+
+    # Determine block or not
+    block = should_block_gif("temp/%s" % gif_name)
+
+    self.finish(json.dumps({"block": block, "caption": "GIF"}))
+
+def should_block_gif(gif_path):
+  """
+  Determine whether or not to block GIF.
+  """
+  # TODO by William
+  return False
 
 def should_block(image_path, blocked_words):
   """
@@ -43,6 +64,7 @@ def make_app():
     url(r"/", MainHandler),
     url(r"/test", ImageHandler),
     url(r"/image", ImageHandler),
+    url(r"/gif", GIFHandler),
   ])
 
 def main():
