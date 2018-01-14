@@ -4,7 +4,6 @@ from tornado.web import Application, RequestHandler, url
 import json
 import classify_nsfw
 
-#docker run --volume=$(pwd):/workspace bvlc/caffe:cpu python ./main.py
 
 class MainHandler(RequestHandler):
   def get(self):
@@ -19,7 +18,7 @@ class ImageHandler(RequestHandler):
     # Write the file to disk
     open("temp/%s" % image_name, "wb+").write(image_data)
 
-    # Determine block or not
+    # Determine the nsfw score
     score  = is_nude("temp/%s" % image_name)
 
     self.finish(json.dumps({"nsfw_score": score}))
