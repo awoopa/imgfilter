@@ -48,7 +48,7 @@ def should_block_gif(gif_path, blocked_words):
   """
   Determine whether or not to block GIF.
   """
-  res = epilepsy.is_gif_safe(gif_path)
+  res = not epilepsy.is_gif_safe(gif_path)
   image_paths = gifutils.save_gif_frames(gif_path)
   block, caption = should_block(image_paths[0], blocked_words)
   if block:
