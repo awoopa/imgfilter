@@ -23,10 +23,11 @@ def get_flash_count(gif_path):
   normalized_flash_count = flash_count * (1 / total_gif_length)
   return normalized_flash_count
 
+gif_cache = {}
 def is_gif_safe(gif_path):
-  normalized_flash_count = get_flash_count(gif_path)
-  print(normalized_flash_count)
-  if normalized_flash_count > 3:
-    return False
-  else:
-    return True
+  if gif_path in gif_cache:
+    return gif_cache[gif_path]
+
+  gif_cache[gif_path] = get_flash_count(gif_path) <= 3
+
+  return gif_cache[gif_path]
