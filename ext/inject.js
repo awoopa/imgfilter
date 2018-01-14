@@ -4,47 +4,102 @@ function getImages() {
 	console.log(imgElements);
 
 	imgElements.forEach(imgEl => {
+			// swap the image with a placeholder
+			// note: we remove the srcset because some sites use them, and
+			// otherwise the original image would still show
+			// also this is easier than processing it like five times
+			imgEl.dataset.imgfilterSrc = imgEl.src;
+			imgEl.src = placeholderUrl(imgEl.width, imgEl.height);
+			imgEl.setAttribute('srcset', '');
+	})
 
-		// if image size is too small, skip it
-		if (imgEl.clientWidth <= MIN_SIZE && imgEl.clientHeight <= MIN_SIZE) {
-			return;
-		}
-
-		// create a parent div and copy over attributes
-		const parentDiv = document.createElement('div');
-
-
-		if (imgEl.classList) { parentDiv.classList = imgEl.classList; }
-		if (imgEl.id) { parentDiv.id = imgEl.id; }
-		if (imgEl.getAttribute('style')) {parentDiv.setAttribute('style', imgEl.getAttribute('style'));}
-		
-		// don't overwite existing width/height styles
-		if (!parentDiv.style.width) {parentDiv.style.width = imgEl.clientWidth = 'px'}
-		if (!parentDiv.style.height) {parentDiv.style.height = imgEl.clientHeight + 'px'}
-
-		// img elements are rendered as inline
-		parentDiv.style.display = 'inline';
-		
-		// insert div
-		imgEl.insertAdjacentElement('beforebegin', parentDiv);
-
-		//
-
-		parentDiv.appendChild(imgEl);
-
-		imgEl.dataset.imgfilterSrc = imgEl.src;
-		imgEl.src = placeholderUrl(imgEl.width, imgEl.height);
-		imgEl.setAttribute('srcset', '');
-
-		chrome.runtime.sendMessage({method: 'postUrl', url: imgEl.dataset.imgfilterSrc}, res => {
-			console.log(res);
-			if (!res.block) {
-				imgEl.src = imgEl.dataset.imgfilterSrc;
-			} else {
-				imgEl.style.filter = "blur(50px) brightness(0)";
-				imgEl.src = imgEl.dataset.imgfilterSrc;
+	imgElements.forEach(imgEl => {
+			// if image size is too small, skip it
+			if (imgEl.clientWidth <= MIN_SIZE && imgEl.clientHeight <= MIN_SIZE) {
+				return;
 			}
-		});
+
+			// create a parent div
+			const parentDiv = document.createElement('div');
+			const overlay = document.createElement('div');
+			const loadingSpinner = document.createElement('div');
+
+			// overlay a loading spinner while shit's loading
+			loadingSpinner.setAttribute('style', `
+				background: url('https://i.redd.it/t5eqkn7fvo5z.gif') rgba(0, 0, 0, 0.7);
+				background-size: contain;
+				background-position: center center;
+				background-repeat: no-repeat;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				z-index: 1000;
+			`);
+
+			// copy over attributes from img
+			if (imgEl.classList) { parentDiv.classList = imgEl.classList; }
+			if (imgEl.id) { parentDiv.id = imgEl.id; }
+			if (imgEl.getAttribute('style')) {parentDiv.setAttribute('style', imgEl.getAttribute('style'));}
+			
+			// don't overwite existing width/height styles
+			if (!parentDiv.style.width) {parentDiv.style.width = imgEl.clientWidth + 'px'}
+			if (!parentDiv.style.height) {parentDiv.style.height = imgEl.clientHeight + 'px'}
+			if (!parentDiv.style.position || parentDiv.style.position === 'static') {parentDiv.style.position = 'relative'}
+
+			// img elements are rendered as inline
+			parentDiv.style.display = 'inline-block';
+			
+			// insert div
+			imgEl.insertAdjacentElement('beforebegin', parentDiv);
+
+			// move image to the new div
+			parentDiv.appendChild(imgEl);
+			parentDiv.appendChild(overlay);
+			parentDiv.appendChild(loadingSpinner);
+
+			// style the overlay in js because who the fuck cares anymore
+			overlay.setAttribute('style', `
+				text-align: center;
+				font-style: bold;
+				color: #f00; 
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				z-index: 100;
+			`);
+			
+			// send this to the background process to upload to the server
+			chrome.runtime.sendMessage({method: 'postUrl', url: imgEl.dataset.imgfilterSrc}, res => {
+				if (!res.block) {
+					// restore the image
+					loadingSpinner.remove();
+					imgEl.src = imgEl.dataset.imgfilterSrc;
+				} else {
+					loadingSpinner.remove();
+					// blur it out and make it really dark
+					imgEl.style.filter = "blur(50px) brightness(0)";
+					// restore image
+					imgEl.src = imgEl.dataset.imgfilterSrc;
+					// add the overlay text
+					overlay.innerHTML = `Hover to view. May contain: ${res.caption}`
+
+					// add hover handlers
+					parentDiv.addEventListener('mouseenter', e => {
+						imgEl.style.filter = '';
+						overlay.style.display = 'none';
+					})
+					parentDiv.addEventListener('mouseout', e => {
+						imgEl.style.filter = 'blur(50px) brightness(0)';
+						overlay.style.display = 'block';
+					})
+				}
+			});
 	});
 
 };
