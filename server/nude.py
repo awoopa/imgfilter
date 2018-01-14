@@ -9,4 +9,4 @@ def has_nudity(image_path):
 
   print(res.text)
   
-  return json.loads(res.text)['nsfw_score'] > 0.05
+  return json.loads(res.text)['nsfw_score'] > 0.15
