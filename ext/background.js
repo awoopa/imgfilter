@@ -45,7 +45,7 @@ function nextStep(arrayBuffer, url, sendResponse) {
 		const blacklist = store['blacklist'] ? store['blacklist'] : [];
 
 		fd.append('name', escape(url.replace(/\//g, '')));
-		fd.append('block', JSON.stringify(blacklist));
+		fd.append('block', JSON.stringify(blacklist.map(e => e.toLowerCase())));
 		fd.append('blockNSFW', store['blockNSFW']);
 		fd.append('blockEpileptic', store['blockEpileptic']);
 
