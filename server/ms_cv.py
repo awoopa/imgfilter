@@ -33,8 +33,8 @@ def query(image_path):
   except Exception as e:
     print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
-  tag_cache[image_path] = data['description']['tags']
-  caption_cache[image_path] = data['description']['captions'][0]['text']
+  tag_cache[image_path] = data.get('description', {'tags': []})['tags']
+  caption_cache[image_path] = data.get('description', {'captions': [{'text': 'An image that our robots are currently unable to caption'}]})['captions'][0]['text']
 
 def predict_tags(image_path):
   """
