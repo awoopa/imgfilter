@@ -2,6 +2,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, RequestHandler, url
 
 import json
+import nude
 import ms_cv
 import tag as tagger
 
@@ -56,6 +57,10 @@ def should_block(image_path, blocked_words):
     for tag in vgg_tags + ms_tags:
       if word in tag:
         return True, ms_caption
+
+  if nude.has_nudity(image_path):
+    print("n00d")
+    return True, "NUDE"
 
   return False, ms_caption
  
