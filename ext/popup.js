@@ -14,12 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('blockNSFW').checked = false
     }
 
-    if (store['captionBlockedContent']) {
-      document.getElementById('captionBlockedContent').checked = true
-    } else {
-      document.getElementById('captionBlockedContent').checked = false
-    }
-
     // Load blacklist items
     if (store['blacklist']) {
       const reverseBlacklist = store['blacklist'].reverse();
@@ -42,12 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const blockEpilepticChecked = document.getElementById('blockNSFW').checked
     chrome.storage.sync.set({'blockNSFW': blockEpilepticChecked});
   });
-
-  document.getElementById('captionBlockedContent').addEventListener('click', () => {
-    const blockEpilepticChecked = document.getElementById('captionBlockedContent').checked
-    chrome.storage.sync.set({'captionBlockedContent': blockEpilepticChecked});
-  });
-
 
   // Add event listeners for new blacklist items
   document.getElementById('addBlacklistItem').addEventListener('keyup', () => {
