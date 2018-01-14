@@ -1,9 +1,13 @@
 function getImages() {
 	const imgElements = document.querySelectorAll('img');
+	const MIN_SIZE = 40
 	console.log(imgElements);
 
 	imgElements.forEach(imgEl => {
-		
+		// if image size is too small, skip it
+		if (imgEl.clientWidth <= MIN_SIZE && imgEl.clientHeight <= MIN_SIZE) {
+			return;
+		}
 		imgEl.dataset.imgfilterSrc = imgEl.src;
 		// debugger;
 		imgEl.src = placeholderUrl(imgEl.width, imgEl.height);
