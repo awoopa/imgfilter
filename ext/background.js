@@ -59,7 +59,7 @@ function nextStep(arrayBuffer, url, sendResponse) {
 		.catch(error => console.error('Error:', error))
 		.then(response => {
 			console.log(response)
-			sendResponse({src: url, caption: response.caption, block: response.block});
+			sendResponse({src: url, reason: response.reason, caption: response.caption, block: response.block});
 		});
 	 });
 };

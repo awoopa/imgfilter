@@ -23,6 +23,7 @@ function getImages() {
 			// create a parent div
 			const parentDiv = document.createElement('div');
 			const overlay = document.createElement('div');
+			const overlayText = document.createElement('span');
 			const loadingSpinner = document.createElement('div');
 
 			// overlay a loading spinner while shit's loading
@@ -64,8 +65,10 @@ function getImages() {
 			// style the overlay in js because who the fuck cares anymore
 			overlay.setAttribute('style', `
 				text-align: center;
-				font-style: bold;
-				color: #f00; 
+				font-weight: bold;
+				font-size: 16px;
+				background: #ccc;
+				color: #222; 
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -73,30 +76,35 @@ function getImages() {
 				bottom: 0;
 				pointer-events: none;
 				z-index: 100;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			`);
+			overlay.appendChild(overlayText);
 			
 			// send this to the background process to upload to the server
 			chrome.runtime.sendMessage({method: 'postUrl', url: imgEl.dataset.imgfilterSrc}, res => {
-				if (!res.block) {
+				if (res.block === false) {
 					// restore the image
 					imgEl.src = imgEl.dataset.imgfilterSrc;
+					overlay.style.display = 'none';
 					loadingSpinner.remove();
-				} else {
+				} else if (res.block === true) {
 					// blur it out and make it really dark
-					imgEl.style.filter = "brightness(0)";
+					// imgEl.style.filter = "brightness(0)";
 					// restore image
 					imgEl.src = imgEl.dataset.imgfilterSrc;
 					// add the overlay text
-					overlay.innerHTML = `Hover to view. May contain: ${res.caption}`
+					overlayText.innerHTML = `Hover to view. <br> ${res.reason} <br> May contain: ${res.caption}`
 
 					// add hover handlers
 					parentDiv.addEventListener('mouseenter', e => {
-						imgEl.style.filter = '';
+						// imgEl.style.filter = '';
 						overlay.style.display = 'none';
 					})
 					parentDiv.addEventListener('mouseout', e => {
-						imgEl.style.filter = 'brightness(0)';
-						overlay.style.display = 'block';
+						// imgEl.style.filter = 'brightness(0)';
+						overlay.style.display = 'flex';
 					})
 					loadingSpinner.remove();
 				}
