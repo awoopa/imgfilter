@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
-	"name": "cmpr",
-	"description": "test",
+	"name": "epilep.tech",
+	"description": "Blocks epileptic triggers and NSFW content, using AI to replace dangerous images with descriptive captions.",
 	"version": "1.0",
 
 	"browser_action": {
@@ -17,7 +17,8 @@
 	],
 
 	"permissions": [
-		"https://ajax.googleapis.com/"
+		"https://ajax.googleapis.com/",
+    "storage"
 	],
 
 	"background": {
