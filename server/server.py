@@ -30,7 +30,7 @@ class GIFHandler(RequestHandler):
     gif_name = self.get_argument('name')
   
     # Write the file to disk
-    open("temp/%s" % gif_name, "wb+").write(image_data)
+    open("temp/%s" % gif_name, "wb+").write(gif_data)
 
     # Determine block or not
     block = should_block_gif("temp/%s" % gif_name)
