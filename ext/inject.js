@@ -1,6 +1,6 @@
 function getImages() {
 	const imgElements = document.querySelectorAll('img');
-	const MIN_SIZE = 40
+	const MIN_SIZE = 75
 	console.log(imgElements);
 
 	imgElements.forEach(imgEl => {
@@ -16,6 +16,7 @@ function getImages() {
 	imgElements.forEach(imgEl => {
 			// if image size is too small, skip it
 			if (imgEl.clientWidth <= MIN_SIZE && imgEl.clientHeight <= MIN_SIZE) {
+				imgEl.src = imgEl.dataset.imgfilterSrc;
 				return;
 			}
 
