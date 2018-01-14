@@ -1,10 +1,4 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	console.log(request);
-	// if (request.method == 'postUrl') {
-	// 		var worker = new Worker('worker.js');
-	// 		worker.postMessage(request.url);
-	// }
-
 	if (request.method == 'postUrl') {
 		var resourceUrl = request.url;   // From the background page
 		var xhr = new XMLHttpRequest();
@@ -39,27 +33,31 @@ function nextStep(arrayBuffer, url, sendResponse) {
 
 	let apiUrl = 'http://ec2-52-41-153-66.us-west-2.compute.amazonaws.com:9999';
 	
-if (url.match(/http(s?):\/\/(.*)\/(.*)\.gif(\?|\&)?(.*)/)) {
+	if (url.match(/http(s?):\/\/(.*)\/(.*)\.gif(\?|\&)?(.*)/)) {
 		apiUrl = `${apiUrl}/gif`;
 		fd.append('gif', arrayBuffer);
-		console.log('gif');
 	} else {
 		apiUrl = `${apiUrl}/image`;
 		fd.append('image', arrayBuffer);
-		console.log('image');
 	}
 
-	fd.append('name', escape(url.replace(/\//g, '')));
-	fd.append('block', JSON.stringify(['shikib', 'hitler']));
+	chrome.storage.sync.get(null, (store) => {
+		const blacklist = store['blacklist'] ? store['blacklist'] : [];
 
+		fd.append('name', escape(url.replace(/\//g, '')));
+		fd.append('block', JSON.stringify(blacklist));
 
-	fetch(apiUrl, {
-		method: 'POST',
-		body: fd
-	})
-	.then(response => response.json())
-	.catch(error => console.error('Error:', error))
-	.then(response => {
-		sendResponse({src: url, caption: response.caption, block: response.block});
-	});
+		console.log(blacklist);
+
+		fetch(apiUrl, {
+			method: 'POST',
+			body: fd
+		})
+		.then(response => response.json())
+		.catch(error => console.error('Error:', error))
+		.then(response => {
+			console.log(response)
+			sendResponse({src: url, caption: response.caption, block: response.block});
+		});
+	 });
 };
